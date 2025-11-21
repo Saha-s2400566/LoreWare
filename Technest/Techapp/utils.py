@@ -1,4 +1,3 @@
-from .models import Product, Cart
 from django.shortcuts import get_object_or_404
 
 class CartService:
@@ -12,6 +11,7 @@ class CartService:
         self.cart = cart
 
     def add(self, product_id, quantity=1):
+        from .models import Product, Cart
         product_id = str(product_id)
         if self.user.is_authenticated:
             product = get_object_or_404(Product, id=product_id)
@@ -30,6 +30,7 @@ class CartService:
             self.save_session()
 
     def update(self, product_id, quantity):
+        from .models import Product, Cart
         product_id = str(product_id)
         quantity = int(quantity)
         if self.user.is_authenticated:
@@ -51,6 +52,7 @@ class CartService:
             self.save_session()
 
     def remove(self, product_id):
+        from .models import Product, Cart
         product_id = str(product_id)
         if self.user.is_authenticated:
             Cart.objects.filter(user=self.user, product_id=product_id).delete()
@@ -60,6 +62,7 @@ class CartService:
                 self.save_session()
 
     def get_cart_items(self):
+        from .models import Product, Cart
         if self.user.is_authenticated:
             return Cart.objects.filter(user=self.user).select_related('product')
         else:
@@ -83,6 +86,7 @@ class CartService:
             return sum(item['total_price'] for item in self.get_cart_items())
 
     def merge_session_cart(self):
+        from .models import Product, Cart
         if not self.user.is_authenticated:
             return
         

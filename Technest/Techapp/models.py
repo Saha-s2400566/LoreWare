@@ -43,27 +43,29 @@ class Product(models.Model):
         return self.name
 
     class Meta:
+        verbose_name = 'Product'
+        verbose_name_plural = 'Products'
+        ordering = ['-created_at']
+
+    @property
+    def total_price(self):
+        return self.quantity * self.product.price
+
+class Cart(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.user.username}'s cart - {self.product.name}"
+
+    class Meta:
         verbose_name = 'Cart Item'
         verbose_name_plural = 'Cart Items'
 
     @property
     def total_price(self):
         return self.quantity * self.product.price
-
-class DeletedItem(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
-    quantity = models.IntegerField(default=1)
-    deleted_at = models.DateTimeField(default=timezone.now)
-    reason = models.TextField(null=True, blank=True)
-    
-    def __str__(self):
-        return f"{self.product.name} - Deleted by {self.user.username}"
-
-    class Meta:
-        verbose_name = 'Deleted Item'
-        verbose_name_plural = 'Deleted Items'
-        ordering = ['-deleted_at']
-
-
-

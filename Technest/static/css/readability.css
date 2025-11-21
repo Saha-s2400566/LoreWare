@@ -1,151 +1,138 @@
 
 /* ========================================
-   GLOBAL TEXT VISIBILITY FIX
-   Force all text to be readable
+   FINAL READABLE STYLE - DARK THEME
+   Consistent across ALL pages
    ======================================== */
 
-/* Universal text color override */
-* {
-    color: #e8e8e8 !important;
+/* Body - dark background */
+body {
+    background: #0a0a0a !important;
+    color: #d0d0d0 !important;
 }
 
-/* Headings - brightest */
-h1, h2, h3, h4, h5, h6,
-.h1, .h2, .h3, .h4, .h5, .h6 {
+/* Headings - bright white for hierarchy */
+h1, h2, h3, h4, h5, h6 {
     color: #ffffff !important;
     font-weight: 600 !important;
 }
 
-/* Paragraphs and spans */
-p, span, div, li, td, th, label, a {
-    color: #e0e0e0 !important;
+/* All regular text - light gray (readable on dark) */
+p, span, div, li, td, label {
+    color: #d0d0d0 !important;
 }
 
 /* Links - cyan for visibility */
-a, a:hover, a:focus, a:active {
-    color: #00f0ff !important;
-    text-decoration: none !important;
+a {
+    color: #00d4ff !important;
 }
 
-/* Form elements */
-input, select, textarea, button {
+a:hover {
+    color: #00b8e6 !important;
+}
+
+/* Form inputs - semi-transparent with light text */
+input, select, textarea {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
     color: #ffffff !important;
+    padding: 10px 15px !important;
+}
+
+input::placeholder {
+    color: rgba(255, 255, 255, 0.4) !important;
+}
+
+input:focus, select:focus, textarea:focus {
     background: rgba(255, 255, 255, 0.15) !important;
-    border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
-}
-
-input::placeholder, textarea::placeholder {
-    color: rgba(255, 255, 255, 0.6) !important;
-}
-
-/* Buttons */
-button, .btn, .btn-primary, .btn-secondary, .btn-success {
-    color: #ffffff !important;
-    font-weight: 500 !important;
-}
-
-/* Tables */
-table, table * {
-    color: #e8e8e8 !important;
-}
-
-thead, thead * {
-    color: #ffffff !important;
-    font-weight: 600 !important;
-}
-
-/* Cards */
-.card, .card-body, .card-title, .card-text {
-    color: #e8e8e8 !important;
-}
-
-.card-title, .card-header {
-    color: #ffffff !important;
-}
-
-/* Lists */
-ul, ol, li {
-    color: #e0e0e0 !important;
-}
-
-/* Small text */
-small, .small {
-    color: #c8c8c8 !important;
-}
-
-/* Muted text - still readable */
-.text-muted {
-    color: #b0b0b0 !important;
-}
-
-/* Neon text stays cyan */
-.neon-text {
-    color: #00f0ff !important;
-}
-
-/* Price text */
-.price, .product-price {
-    color: #ffffff !important;
-    font-weight: 600 !important;
-}
-
-/* Navigation */
-nav, nav * {
-    color: #e8e8e8 !important;
-}
-
-.nav-link, .navbar-nav .nav-link {
-    color: #e8e8e8 !important;
-}
-
-.nav-link:hover {
-    color: #00f0ff !important;
-}
-
-/* Footer */
-footer, footer * {
-    color: #c0c0c0 !important;
-}
-
-footer h1, footer h2, footer h3, footer h4, footer h5, footer h6 {
-    color: #ffffff !important;
-}
-
-/* Alerts */
-.alert {
-    color: #ffffff !important;
-}
-
-/* Badges */
-.badge {
-    color: #ffffff !important;
-}
-
-/* Ensure form labels are visible */
-label, .form-label {
-    color: #f5f5f5 !important;
-    font-weight: 500 !important;
+    border-color: #00d4ff !important;
+    outline: none !important;
 }
 
 /* Select options */
-option {
+select option {
     background: #1a1a1a !important;
     color: #ffffff !important;
 }
 
-/* Strong and bold */
-strong, b {
+/* Buttons - keep original styling */
+button, .btn {
     color: #ffffff !important;
 }
 
-/* Emphasis */
-em, i:not(.fa):not(.fab):not(.fas):not(.far) {
-    color: #e8e8e8 !important;
+/* Tables */
+th {
+    color: #ffffff !important;
+    font-weight: 600 !important;
 }
 
-/* Code blocks */
-code, pre {
-    color: #00ff88 !important;
-    background: rgba(0, 255, 136, 0.1) !important;
+td {
+    color: #d0d0d0 !important;
+}
+
+/* Cards - dark glass effect */
+.card, .glass-card {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.card-title {
+    color: #ffffff !important;
+}
+
+.card-text {
+    color: #d0d0d0 !important;
+}
+
+/* Small and muted text */
+small {
+    color: #b0b0b0 !important;
+}
+
+.text-muted {
+    color: #999999 !important;
+}
+
+/* Neon text - cyan accent */
+.neon-text {
+    color: #00d4ff !important;
+}
+
+/* Navigation */
+.nav-link {
+    color: #d0d0d0 !important;
+}
+
+.nav-link:hover {
+    color: #00d4ff !important;
+}
+
+/* Footer */
+footer {
+    color: #b0b0b0 !important;
+}
+
+footer h1, footer h2, footer h3, footer h4 {
+    color: #ffffff !important;
+}
+
+/* Form labels */
+.form-label, label {
+    color: #e0e0e0 !important;
+    font-weight: 500 !important;
+}
+
+/* Form check (radio/checkbox) */
+.form-check-label {
+    color: #d0d0d0 !important;
+}
+
+.form-check-input {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+}
+
+/* Strong/bold */
+strong, b, .fw-bold {
+    color: #ffffff !important;
 }
 

@@ -15,8 +15,9 @@
             <h2 style="font-size: 3rem; font-weight: 700; margin-bottom: 1rem;">
                 Our <span class="neon-text">Products</span>
             </h2>
-            <p style="color: var(--color-mid-gray); font-size: 1.1rem;">Discover our complete collection of cutting-edge
-                technology</p>
+            <p style="color: var(--color-mid-gray); font-size: 1.1rem;">
+                Discover our complete collection of cutting‑edge technology
+            </p>
         </div>
 
         <div class="row">
@@ -24,7 +25,6 @@
             <div class="col-lg-3 mb-4">
                 <div class="glass-card" style="padding: 1.5rem; position: sticky; top: 100px;">
                     <h4 style="color: var(--color-neon-cyan); margin-bottom: 1.5rem;">Filters</h4>
-
                     <form method="GET" action="{% url 'products' %}">
                         <!-- Search -->
                         <div class="form-group mb-4">
@@ -32,29 +32,24 @@
                             <input type="text" name="q" value="{{ search_query|default:'' }}"
                                 class="form-control-futuristic" placeholder="Search products...">
                         </div>
-
                         <!-- Categories -->
                         <div class="form-group mb-4">
                             <label
                                 style="color: var(--color-light-gray); margin-bottom: 0.5rem; display: block;">Category</label>
                             <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                                 <a href="{% url 'products' %}{% if search_query %}?q={{ search_query }}{% endif %}"
-                                    class="filter-link {% if not current_category %}active{% endif %}">
-                                    All Categories
-                                </a>
+                                    class="filter-link {% if not current_category %}active{% endif %}">All
+                                    Categories</a>
                                 {% for category in categories %}
                                 <a href="?category={{ category.slug }}{% if search_query %}&q={{ search_query }}{% endif %}"
-                                    class="filter-link {% if current_category == category.slug %}active{% endif %}">
-                                    {{ category.name }}
-                                </a>
+                                    class="filter-link {% if current_category == category.slug %}active{% endif %}">{{
+                                    category.name }}</a>
                                 {% endfor %}
                             </div>
-                            <!-- Hidden input to keep category selected when submitting form -->
-                            {% if current_category %}
-                            <input type="hidden" name="category" value="{{ current_category }}">
-                            {% endif %}
                         </div>
-
+                        {% if current_category %}
+                        <input type="hidden" name="category" value="{{ current_category }}">
+                        {% endif %}
                         <!-- Price Range -->
                         <div class="form-group mb-4">
                             <label style="color: var(--color-light-gray);">Price Range</label>
@@ -66,20 +61,18 @@
                                     value="{{ request.GET.max_price }}" style="width: 100%;">
                             </div>
                         </div>
-
                         <!-- Sort -->
                         <div class="form-group mb-4">
                             <label style="color: var(--color-light-gray);">Sort By</label>
                             <select name="sort" class="form-control-futuristic" onchange="this.form.submit()">
-                                <option value="newest" {% if current_sort == 'newest' %}selected{% endif %}>Newest
+                                <option value="newest" {% if current_sort=='newest' %}selected{% endif %}>Newest
                                     Arrivals</option>
-                                <option value="price_low" {% if current_sort == 'price_low' %}selected{% endif %}>Price:
+                                <option value="price_low" {% if current_sort=='price_low' %}selected{% endif %}>Price:
                                     Low to High</option>
-                                <option value="price_high" {% if current_sort == 'price_high' %}selected{% endif %}>Price:
+                                <option value="price_high" {% if current_sort=='price_high' %}selected{% endif %}>Price:
                                     High to Low</option>
                             </select>
                         </div>
-
                         <button type="submit" class="btn-futuristic" style="width: 100%;">Apply Filters</button>
                         <a href="{% url 'products' %}" class="btn-outline mt-2"
                             style="width: 100%; display: block; text-align: center;">Clear All</a>
@@ -89,12 +82,12 @@
 
             <!-- Product Grid -->
             <div class="col-lg-9">
-                <div class="grid-futuristic"
-                    style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem;">
+                <div class="grid"
+                    style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem;">
                     {% for product in products %}
                     <div class="product-card-futuristic slide-in" data-product-id="{{ product.id }}"
-                        style="padding: 0;">
-                        <!-- Product Image -->
+                        style="padding: 0; position: relative;">
+                        <!-- Image -->
                         <div style="position: relative; overflow: hidden;">
                             <a href="{% url 'product_detail' product.id %}">
                                 {% if product.image %}
@@ -108,57 +101,31 @@
                                 <i class="fa fa-heart wishlist-icon {% if product.in_wishlist %}active{% endif %}"></i>
                             </button>
                         </div>
-
-                        <!-- Product Info -->
+                        <!-- Info -->
                         <div style="padding: 1.5rem;">
                             <a href="{% url 'product_detail' product.id %}" style="text-decoration: none;">
                                 <h3
                                     style="color: white; font-size: 1.2rem; margin: 0 0 0.75rem 0; font-weight: 600; min-height: 2.4rem; line-height: 1.2;">
-                                    {{ product.name }}
-                                </h3>
+                                    {{ product.name }}</h3>
                             </a>
-
                             <p
                                 style="color: var(--color-mid-gray); margin-bottom: 1rem; min-height: 60px; font-size: 0.9rem; line-height: 1.5;">
-                                {{ product.desc|truncatewords:12 }}
-                            </p>
-
-                            <!-- Stock Status -->
+                                {{ product.desc|truncatewords:12 }}</p>
+                            <!-- Stock & Quantity -->
                             {% if product.stock > 0 %}
                             <p
                                 style="color: var(--color-neon-cyan); font-size: 0.85rem; margin-bottom: 0.75rem; font-weight: 500;">
-                                ✓ In Stock
-                            </p>
-                            {% else %}
-                            <p style="color: #ff4444; font-size: 0.85rem; margin-bottom: 0.75rem; font-weight: 500;">
-                                ✗ Out of Stock
-                            </p>
-                            {% endif %}
-
-                            <!-- Price and Rating -->
-                            <div
-                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                                <span class="product-price" style="font-size: 1.5rem;">${{ product.price }}</span>
-                                <div style="display: flex; gap: 0.25rem; align-items: center;">
-                                    <span style="color: var(--color-neon-cyan); font-size: 0.95rem;">★ {{
-                                        product.average_rating|floatformat:1 }}</span>
-                                    <span style="color: var(--color-mid-gray); font-size: 0.8rem;">({{
-                                        product.review_count }})</span>
-                                </div>
-                            </div>
-
-                            <!-- Add to Cart Section -->
-                            {% if product.stock > 0 %}
-                            <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.75rem;">
+                                ✓ In Stock</p>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
                                 <button class="quantity-btn minus-btn"
                                     style="background: var(--glass-bg); border: 1px solid var(--glass-border); color: white; width: 35px; height: 35px; border-radius: 4px; cursor: pointer; font-size: 1.2rem; flex-shrink: 0;">-</button>
                                 <input type="number" class="quantity-input" value="1" min="1" max="{{ product.stock }}"
-                                    style="width: 60px; text-align: center; background: var(--glass-bg); border: 1px solid var(--glass-border); color: white; padding: 6px; border-radius: 4px; font-size: 1rem; flex-shrink: 0;">
+                                    style="width: 60px; text-align: center; background: var(--glass-bg); border: 1px solid var(--glass-border); color: white; padding: 6px; border-radius: 4px; font-size: 1rem; flex-shrink: 0;" />
                                 <button class="quantity-btn plus-btn"
                                     style="background: var(--glass-bg); border: 1px solid var(--glass-border); color: white; width: 35px; height: 35px; border-radius: 4px; cursor: pointer; font-size: 1.2rem; flex-shrink: 0;">+</button>
                             </div>
-                            <button class="btn-futuristic add-to-cart-btn" style="width: 100%; padding: 0.75rem;">Add to
-                                Cart</button>
+                            <button class="btn-futuristic add-to-cart-btn"
+                                style="width: 100%; padding: 0.75rem; margin-top: 0.5rem;">Add to Cart</button>
                             {% else %}
                             <button class="btn-futuristic"
                                 style="width: 100%; opacity: 0.5; cursor: not-allowed; padding: 0.75rem;" disabled>Out

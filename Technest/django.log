@@ -1,0 +1,54 @@
+Not Found: /static/css/futuristic-theme.css
+Not Found: /static/css/quick-wins.css
+Not Found: /static/css/readability.css
+"GET /static/css/readability.css HTTP/1.1" 404 179
+"GET /static/css/futuristic-theme.css HTTP/1.1" 404 179
+"GET /static/css/quick-wins.css HTTP/1.1" 404 179
+Not Found: /media/products/Logitech_MX_Master_3S.jpg
+Not Found: /media/products/Samsung_Galaxy_Watch_6.jpg
+Not Found: /media/products/Sony_WH-1000XM5.jpg
+"GET /media/products/Samsung_Galaxy_Watch_6.jpg HTTP/1.1" 404 179
+Not Found: /media/products/Fitbit_Charge_6.jpg
+Not Found: /static/js/quick-wins.js
+"GET /media/products/Logitech_MX_Master_3S.jpg HTTP/1.1" 404 179
+"GET /media/products/Sony_WH-1000XM5.jpg HTTP/1.1" 404 179
+"GET /media/products/Fitbit_Charge_6.jpg HTTP/1.1" 404 179
+Not Found: /media/products/AirPods_Pro_2nd_Gen.jpg
+"GET /static/js/quick-wins.js HTTP/1.1" 404 179
+Not Found: /static/images/about.png
+"GET /static/images/about.png HTTP/1.1" 404 179
+"GET /media/products/AirPods_Pro_2nd_Gen.jpg HTTP/1.1" 404 179
+Not Found: /media/products/Apple_Watch_Series_9.jpg
+"GET /media/products/Apple_Watch_Series_9.jpg HTTP/1.1" 404 179
+Not Found: /static/css/futuristic-theme.css
+"GET /static/css/futuristic-theme.css HTTP/1.1" 404 179
+Not Found: /static/css/quick-wins.css
+Not Found: /static/css/readability.css
+Not Found: /media/products/Logitech_MX_Master_3S.jpg
+Not Found: /media/products/Apple_Watch_Series_9.jpg
+Not Found: /media/products/Samsung_Galaxy_Watch_6.jpg
+Not Found: /media/products/Fitbit_Charge_6.jpg
+"GET /media/products/Logitech_MX_Master_3S.jpg HTTP/1.1" 404 179
+"GET /static/css/quick-wins.css HTTP/1.1" 404 179
+"GET /media/products/Samsung_Galaxy_Watch_6.jpg HTTP/1.1" 404 179
+"GET /media/products/Apple_Watch_Series_9.jpg HTTP/1.1" 404 179
+"GET /static/css/readability.css HTTP/1.1" 404 179
+"GET /media/products/Fitbit_Charge_6.jpg HTTP/1.1" 404 179
+Not Found: /static/js/quick-wins.js
+Not Found: /media/products/Sony_WH-1000XM5.jpg
+Not Found: /media/products/AirPods_Pro_2nd_Gen.jpg
+Not Found: /static/images/about.png
+"GET /static/js/quick-wins.js HTTP/1.1" 404 179
+"GET /media/products/Sony_WH-1000XM5.jpg HTTP/1.1" 404 179
+"GET /media/products/AirPods_Pro_2nd_Gen.jpg HTTP/1.1" 404 179
+"GET /static/images/about.png HTTP/1.1" 404 179
+Not Found: /static/css/futuristic-theme.css
+"GET /static/css/futuristic-theme.css HTTP/1.1" 404 179
+Not Found: /static/css/quick-wins.css
+Not Found: /static/css/readability.css
+Not Found: /static/images/about.png
+Not Found: /static/js/quick-wins.js
+"GET /static/css/quick-wins.css HTTP/1.1" 404 179
+"GET /static/css/readability.css HTTP/1.1" 404 179
+"GET /static/images/about.png HTTP/1.1" 404 179
+"GET /static/js/quick-wins.js HTTP/1.1" 404 179

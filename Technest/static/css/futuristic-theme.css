@@ -509,4 +509,176 @@ html {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 var(--spacing-md);
+}/* Improved Text Readability */
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
+
+/* Better contrast for all text */
+p, span, div, label, a {
+    color: #e0e0e0 !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #ffffff !important;
+    font-weight: 600;
+}
+
+/* Form inputs with better visibility */
+input, select, textarea {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    color: #ffffff !important;
+    padding: 12px !important;
+    border-radius: 8px !important;
+}
+
+input::placeholder, textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+input:focus, select:focus, textarea:focus {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border-color: var(--color-neon-cyan) !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.1) !important;
+}
+
+/* Better button visibility */
+button, .btn {
+    font-weight: 500 !important;
+    letter-spacing: 0.5px !important;
+}
+
+/* Ensure links are visible */
+a {
+    color: var(--color-neon-cyan) !important;
+}
+
+a:hover {
+    color: #00d4ff !important;
+}
+
+/* ========================================
+   READABILITY OVERRIDES - APPLIED LAST
+   ======================================== */
+
+/* Make all text more visible */
+body {
+    color: #e8e8e8 !important;
+}
+
+/* Better paragraph visibility */
+p {
+    color: #d5d5d5 !important;
+}
+
+/* Brighter headings */
+h1, h2, h3, h4, h5, h6 {
+    color: #ffffff !important;
+}
+
+/* Form labels */
+label {
+    color: #f0f0f0 !important;
+    font-weight: 500 !important;
+}
+
+/* Input fields with better contrast */
+input, select, textarea {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+    color: #ffffff !important;
+}
+
+input::placeholder {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Better link visibility */
+a {
+    color: #00f0ff !important;
+}
+
+/* Span elements */
+span {
+    color: inherit !important;
+}
+
+/* Div text */
+div {
+    color: inherit !important;
+}
+
+/* List items */
+li {
+    color: #d5d5d5 !important;
+}
+
+/* Table text */
+td, th {
+    color: #e8e8e8 !important;
+}
+
+/* Small text */
+small {
+    color: #c0c0c0 !important;
+}
+
+/* Form control specific */
+.form-control, .form-control-futuristic {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+    color: #ffffff !important;
+}
+
+.form-control:focus, .form-control-futuristic:focus {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-color: #00f0ff !important;
+}
+
+/* Select dropdowns */
+select option {
+    background: #1a1a1a !important;
+    color: #ffffff !important;
+}
+
+/* Button text */
+button {
+    color: #ffffff !important;
+}
+
+/* Card text */
+.card-text, .glass-card p {
+    color: #d5d5d5 !important;
+}
+
+/* Ensure neon text stays bright */
+.neon-text {
+    color: #00f0ff !important;
+}
+
+/* Product price visibility */
+.product-price {
+    color: #ffffff !important;
+}
+
+/* Filter links */
+.filter-link {
+    color: #d0d0d0 !important;
+}
+
+.filter-link:hover, .filter-link.active {
+    color: #00f0ff !important;
+}
+
+/* Nav links */
+.nav-link-futuristic {
+    color: #e0e0e0 !important;
+}
+
+.nav-link-futuristic:hover {
+    color: #00f0ff !important;
+}
+

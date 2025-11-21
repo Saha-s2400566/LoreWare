@@ -163,6 +163,11 @@ class Cart(models.Model):
         """Calculate subtotal for this cart item"""
         return self.product.get_price * self.quantity
 
+    @property
+    def total_price(self):
+        """Alias for subtotal to match guest cart structure"""
+        return self.subtotal
+
 
 # ==================== ORDER MODELS ====================
 class Order(models.Model):

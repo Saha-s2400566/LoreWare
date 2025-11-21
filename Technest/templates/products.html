@@ -19,66 +19,165 @@
                 technology</p>
         </div>
 
-        <div class="grid-futuristic">
-            {% for product in products %}
-            <div class="product-card-futuristic slide-in" data-product-id="{{ product.id }}">
-                <div style="position: relative; overflow: hidden;">
-                    {% if product.image %}
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}"
-                        style="width: 100%; height: 250px; object-fit: cover; border-radius: var(--radius-md);" />
-                    {% else %}
-                    <img src="{% static 'images/Samsung S8.png' %}" alt="placeholder"
-                        style="width: 100%; height: 250px; object-fit: cover; border-radius: var(--radius-md);" />
-                    {% endif %}
+        <div class="row">
+            <!-- Sidebar Filters -->
+            <div class="col-lg-3 mb-4">
+                <div class="glass-card" style="padding: 1.5rem; position: sticky; top: 100px;">
+                    <h4 style="color: var(--color-neon-cyan); margin-bottom: 1.5rem;">Filters</h4>
+
+                    <form method="GET" action="{% url 'products' %}">
+                        <!-- Search -->
+                        <div class="form-group mb-4">
+                            <label style="color: var(--color-light-gray);">Search</label>
+                            <input type="text" name="q" value="{{ search_query|default:'' }}"
+                                class="form-control-futuristic" placeholder="Search products...">
+                        </div>
+
+                        <!-- Categories -->
+                        <div class="form-group mb-4">
+                            <label
+                                style="color: var(--color-light-gray); margin-bottom: 0.5rem; display: block;">Category</label>
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <a href="{% url 'products' %}{% if search_query %}?q={{ search_query }}{% endif %}"
+                                    class="filter-link {% if not current_category %}active{% endif %}">
+                                    All Categories
+                                </a>
+                                {% for category in categories %}
+                                <a href="?category={{ category.slug }}{% if search_query %}&q={{ search_query }}{% endif %}"
+                                    class="filter-link {% if current_category == category.slug %}active{% endif %}">
+                                    {{ category.name }}
+                                </a>
+                                {% endfor %}
+                            </div>
+                            <!-- Hidden input to keep category selected when submitting form -->
+                            {% if current_category %}
+                            <input type="hidden" name="category" value="{{ current_category }}">
+                            {% endif %}
+                        </div>
+
+                        <!-- Price Range -->
+                        <div class="form-group mb-4">
+                            <label style="color: var(--color-light-gray);">Price Range</label>
+                            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                <input type="number" name="min_price" class="form-control-futuristic" placeholder="Min"
+                                    value="{{ request.GET.min_price }}" style="width: 100%;">
+                                <span style="color: var(--color-mid-gray);">-</span>
+                                <input type="number" name="max_price" class="form-control-futuristic" placeholder="Max"
+                                    value="{{ request.GET.max_price }}" style="width: 100%;">
+                            </div>
+                        </div>
+
+                        <!-- Sort -->
+                        <div class="form-group mb-4">
+                            <label style="color: var(--color-light-gray);">Sort By</label>
+                            <select name="sort" class="form-control-futuristic" onchange="this.form.submit()">
+                                <option value="newest" {% if current_sort == 'newest' %}selected{% endif %}>Newest
+                                    Arrivals</option>
+                                <option value="price_low" {% if current_sort == 'price_low' %}selected{% endif %}>Price:
+                                    Low to High</option>
+                                <option value="price_high" {% if current_sort == 'price_high' %}selected{% endif %}>Price:
+                                    High to Low</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn-futuristic" style="width: 100%;">Apply Filters</button>
+                        <a href="{% url 'products' %}" class="btn-outline mt-2"
+                            style="width: 100%; display: block; text-align: center;">Clear All</a>
+                    </form>
                 </div>
-                <div class="product-info">
-                    <h3 class="product-title">{{ product.name }}</h3>
-                    <p style="color: var(--color-mid-gray); margin-bottom: 1rem; min-height: 60px;">{{
-                        product.desc|truncatewords:20 }}</p>
+            </div>
 
-                    <!-- Stock Status -->
-                    {% if product.stock > 0 %}
-                    <p style="color: var(--color-neon-cyan); font-size: 0.9rem; margin-bottom: 0.5rem;">
-                        ✓ In Stock ({{ product.stock }} available)
-                    </p>
-                    {% else %}
-                    <p style="color: #ff4444; font-size: 0.9rem; margin-bottom: 0.5rem;">
-                        ✗ Out of Stock
-                    </p>
-                    {% endif %}
+            <!-- Product Grid -->
+            <div class="col-lg-9">
+                <div class="grid-futuristic"
+                    style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem;">
+                    {% for product in products %}
+                    <div class="product-card-futuristic slide-in" data-product-id="{{ product.id }}"
+                        style="padding: 0;">
+                        <!-- Product Image -->
+                        <div style="position: relative; overflow: hidden;">
+                            <a href="{% url 'product_detail' product.id %}">
+                                {% if product.image %}
+                                <img src="{{ product.image.url }}" alt="{{ product.name }}"
+                                    style="width: 100%; height: 280px; object-fit: cover; border-radius: var(--radius-md) var(--radius-md) 0 0; display: block;" />
+                                {% endif %}
+                            </a>
+                            <!-- Wishlist Button -->
+                            <button class="wishlist-btn" data-product-id="{{ product.id }}"
+                                style="position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.7); border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s; backdrop-filter: blur(10px);">
+                                <i class="fa fa-heart wishlist-icon {% if product.in_wishlist %}active{% endif %}"></i>
+                            </button>
+                        </div>
 
-                    <div
-                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                        <span class="product-price">${{ product.price }}</span>
-                        <div style="display: flex; gap: 0.25rem;">
-                            <span style="color: var(--color-neon-cyan); font-size: 1.2rem;">★★★★★</span>
+                        <!-- Product Info -->
+                        <div style="padding: 1.5rem;">
+                            <a href="{% url 'product_detail' product.id %}" style="text-decoration: none;">
+                                <h3
+                                    style="color: white; font-size: 1.2rem; margin: 0 0 0.75rem 0; font-weight: 600; min-height: 2.4rem; line-height: 1.2;">
+                                    {{ product.name }}
+                                </h3>
+                            </a>
+
+                            <p
+                                style="color: var(--color-mid-gray); margin-bottom: 1rem; min-height: 60px; font-size: 0.9rem; line-height: 1.5;">
+                                {{ product.desc|truncatewords:12 }}
+                            </p>
+
+                            <!-- Stock Status -->
+                            {% if product.stock > 0 %}
+                            <p
+                                style="color: var(--color-neon-cyan); font-size: 0.85rem; margin-bottom: 0.75rem; font-weight: 500;">
+                                ✓ In Stock
+                            </p>
+                            {% else %}
+                            <p style="color: #ff4444; font-size: 0.85rem; margin-bottom: 0.75rem; font-weight: 500;">
+                                ✗ Out of Stock
+                            </p>
+                            {% endif %}
+
+                            <!-- Price and Rating -->
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                <span class="product-price" style="font-size: 1.5rem;">${{ product.price }}</span>
+                                <div style="display: flex; gap: 0.25rem; align-items: center;">
+                                    <span style="color: var(--color-neon-cyan); font-size: 0.95rem;">★ {{
+                                        product.average_rating|floatformat:1 }}</span>
+                                    <span style="color: var(--color-mid-gray); font-size: 0.8rem;">({{
+                                        product.review_count }})</span>
+                                </div>
+                            </div>
+
+                            <!-- Add to Cart Section -->
+                            {% if product.stock > 0 %}
+                            <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.75rem;">
+                                <button class="quantity-btn minus-btn"
+                                    style="background: var(--glass-bg); border: 1px solid var(--glass-border); color: white; width: 35px; height: 35px; border-radius: 4px; cursor: pointer; font-size: 1.2rem; flex-shrink: 0;">-</button>
+                                <input type="number" class="quantity-input" value="1" min="1" max="{{ product.stock }}"
+                                    style="width: 60px; text-align: center; background: var(--glass-bg); border: 1px solid var(--glass-border); color: white; padding: 6px; border-radius: 4px; font-size: 1rem; flex-shrink: 0;">
+                                <button class="quantity-btn plus-btn"
+                                    style="background: var(--glass-bg); border: 1px solid var(--glass-border); color: white; width: 35px; height: 35px; border-radius: 4px; cursor: pointer; font-size: 1.2rem; flex-shrink: 0;">+</button>
+                            </div>
+                            <button class="btn-futuristic add-to-cart-btn" style="width: 100%; padding: 0.75rem;">Add to
+                                Cart</button>
+                            {% else %}
+                            <button class="btn-futuristic"
+                                style="width: 100%; opacity: 0.5; cursor: not-allowed; padding: 0.75rem;" disabled>Out
+                                of Stock</button>
+                            {% endif %}
                         </div>
                     </div>
-
-                    {% if product.stock > 0 %}
-                    <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 1rem;">
-                        <button class="quantity-btn minus-btn"
-                            style="background: var(--glass-bg); border: 1px solid var(--glass-border); color: white; width: 35px; height: 35px; border-radius: 4px; cursor: pointer; font-size: 1.2rem;">-</button>
-                        <input type="number" class="quantity-input" value="1" min="1" max="{{ product.stock }}"
-                            style="width: 60px; text-align: center; background: var(--glass-bg); border: 1px solid var(--glass-border); color: white; padding: 6px; border-radius: 4px; font-size: 1rem;">
-                        <button class="quantity-btn plus-btn"
-                            style="background: var(--glass-bg); border: 1px solid var(--glass-border); color: white; width: 35px; height: 35px; border-radius: 4px; cursor: pointer; font-size: 1.2rem;">+</button>
+                    {% empty %}
+                    <div class="col-12 text-center" style="grid-column: 1 / -1; padding: 3rem;">
+                        <div class="glass-card" style="padding: 3rem;">
+                            <h3 style="color: var(--color-neon-cyan); margin-bottom: 1rem;">No Products Found</h3>
+                            <p style="color: var(--color-mid-gray);">Try adjusting your filters or search query.</p>
+                            <a href="{% url 'products' %}" class="btn-futuristic"
+                                style="margin-top: 1.5rem; display: inline-block;">View All Products</a>
+                        </div>
                     </div>
-                    <button class="btn-futuristic add-to-cart-btn" style="width: 100%;">Add to Cart</button>
-                    {% else %}
-                    <button class="btn-futuristic" style="width: 100%; opacity: 0.5; cursor: not-allowed;" disabled>Out
-                        of Stock</button>
-                    {% endif %}
+                    {% endfor %}
                 </div>
             </div>
-            {% empty %}
-            <div class="col-12 text-center" style="grid-column: 1 / -1;">
-                <div class="glass-card" style="padding: 3rem;">
-                    <h3 style="color: var(--color-neon-cyan); margin-bottom: 1rem;">No Products Available</h3>
-                    <p style="color: var(--color-mid-gray);">Check back soon for new arrivals!</p>
-                </div>
-            </div>
-            {% endfor %}
         </div>
     </div>
 </section>
@@ -86,88 +185,4 @@
 <!-- Circuit Divider -->
 <div class="circuit-divider"></div>
 
-{% endblock %}
-
-{% block extra_scripts %}
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Handle quantity buttons
-        document.querySelectorAll('.quantity-container, .product-card-futuristic').forEach(container => {
-            const minusBtn = container.querySelector('.minus-btn');
-            const plusBtn = container.querySelector('.plus-btn');
-            const quantityInput = container.querySelector('.quantity-input');
-
-            if (plusBtn && minusBtn && quantityInput) {
-                plusBtn.addEventListener('click', function () {
-                    const max = parseInt(quantityInput.getAttribute('max')) || 999;
-                    const current = parseInt(quantityInput.value);
-                    if (current < max) {
-                        quantityInput.value = current + 1;
-                    }
-                });
-
-                minusBtn.addEventListener('click', function () {
-                    if (parseInt(quantityInput.value) > 1) {
-                        quantityInput.value = parseInt(quantityInput.value) - 1;
-                    }
-                });
-            }
-        });
-
-        // Handle add to cart
-        document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-            button.addEventListener('click', function () {
-                const productBox = this.closest('.product-card-futuristic');
-                const quantity = productBox.querySelector('.quantity-input').value;
-                const productId = productBox.dataset.productId;
-
-                // Send AJAX request to Django
-                fetch('/add_to_cart/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': getCookie('csrftoken')
-                    },
-                    body: JSON.stringify({
-                        product_id: productId,
-                        quantity: quantity
-                    })
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.status === 'success') {
-                            // Show success message with neon effect
-                            const msg = document.createElement('div');
-                            msg.style.cssText = 'position: fixed; top: 100px; right: 20px; background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--color-neon-cyan); padding: 1rem 2rem; border-radius: 8px; color: white; z-index: 9999; box-shadow: 0 0 20px var(--color-cyan-glow);';
-                            msg.textContent = '✓ Product added to cart!';
-                            document.body.appendChild(msg);
-                            setTimeout(() => msg.remove(), 3000);
-                        } else {
-                            alert('Error adding product to cart');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Error adding product to cart');
-                    });
-            });
-        });
-
-        // Helper function to get CSRF token
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-    });
-</script>
 {% endblock %}

@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django import forms
-from .models import CustomUser
+from .models import CustomUser, ProductReview
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True)

@@ -1,11 +1,16 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView
+from django.views.decorators.http import require_POST
+from django.http import JsonResponse
 from decimal import Decimal
 from .utils import CartService
 import json
-from .models import Product, Wishlist, ProductReview
-from django.db.models import Avg
-from .forms import ProductReviewForm
+from .models import Product, Wishlist, ProductReview, Category
+from django.db import models
+from .forms import ProductReviewForm, CustomUserCreationForm
 
 # Create your views here.
 def index(request):
@@ -13,8 +18,39 @@ def index(request):
     return render(request, 'index.html', {'products': products})
 
 def products(request):
-    # Get all active products
+    # Start with all active products
     products = Product.objects.filter(is_active=True)
+    categories = Category.objects.filter(is_active=True)
+    
+    # Search
+    query = request.GET.get('q')
+    if query:
+        products = products.filter(
+            models.Q(name__icontains=query) | 
+            models.Q(desc__icontains=query)
+        )
+
+    # Category Filter
+    category_slug = request.GET.get('category')
+    if category_slug:
+        products = products.filter(category__slug=category_slug)
+
+    # Price Filter
+    min_price = request.GET.get('min_price')
+    max_price = request.GET.get('max_price')
+    if min_price:
+        products = products.filter(price__gte=min_price)
+    if max_price:
+        products = products.filter(price__lte=max_price)
+
+    # Sorting
+    sort_by = request.GET.get('sort', 'newest')
+    if sort_by == 'price_low':
+        products = products.order_by('price')
+    elif sort_by == 'price_high':
+        products = products.order_by('-price')
+    else:
+        products = products.order_by('-created_at')
     
     # Get cart quantities
     cart_service = CartService(request)
@@ -27,13 +63,23 @@ def products(request):
         # For session cart, items is a list of dicts
         for item in cart_items:
             cart_quantities[item['product'].id] = item['quantity']
+            
+    # Get wishlist items for logged-in users
+    wishlist_product_ids = set()
+    if request.user.is_authenticated:
+        wishlist_product_ids = set(Wishlist.objects.filter(user=request.user).values_list('product_id', flat=True))
         
-    # Add cart quantities to products
+    # Add cart quantities and wishlist status to products
     for product in products:
         product.cart_quantity = cart_quantities.get(product.id, 0)
+        product.in_wishlist = product.id in wishlist_product_ids
     
     context = {
         'products': products,
+        'categories': categories,
+        'current_category': category_slug,
+        'current_sort': sort_by,
+        'search_query': query,
     }
     return render(request, 'products.html', context)
 
@@ -157,27 +203,26 @@ def wishlist_view(request):
 @login_required
 @require_POST
 def add_to_wishlist(request, product_id):
-    """Add product to wishlist via AJAX"""
+    """Toggle product in wishlist via AJAX"""
     try:
         product = get_object_or_404(Product, id=product_id)
         
         # Check if already in wishlist
-        wishlist_item, created = Wishlist.objects.get_or_create(
-            user=request.user,
-            product=product
-        )
+        wishlist_item = Wishlist.objects.filter(user=request.user, product=product).first()
         
-        if created:
+        if wishlist_item:
+            wishlist_item.delete()
+            return JsonResponse({
+                'status': 'success',
+                'message': f'{product.name} removed from wishlist',
+                'action': 'removed'
+            })
+        else:
+            Wishlist.objects.create(user=request.user, product=product)
             return JsonResponse({
                 'status': 'success',
                 'message': f'{product.name} added to wishlist',
                 'action': 'added'
-            })
-        else:
-            return JsonResponse({
-                'status': 'info',
-                'message': f'{product.name} is already in your wishlist',
-                'action': 'exists'
             })
     except Exception as e:
         return JsonResponse({
@@ -215,7 +260,7 @@ def move_to_cart(request, wishlist_id):
         product = wishlist_item.product
         
         # Check if product is in stock
-        if not product.in_stock:
+        if not product.stock > 0:
             return JsonResponse({
                 'status': 'error',
                 'message': f'{product.name} is out of stock'
@@ -260,6 +305,12 @@ def product_detail(request, product_id):
     reviews = ProductReview.objects.filter(product=product, is_verified_purchase=True).order_by('-created_at')
     # Average rating
     avg_rating = reviews.aggregate(avg=models.Avg('rating'))['avg'] or 0
+    
+    # Check wishlist status
+    in_wishlist = False
+    if request.user.is_authenticated:
+        in_wishlist = Wishlist.objects.filter(user=request.user, product=product).exists()
+
     # Review form for logged-in users
     if request.method == 'POST':
         form = ProductReviewForm(request.POST)
@@ -278,6 +329,7 @@ def product_detail(request, product_id):
         'reviews': reviews,
         'avg_rating': avg_rating,
         'review_form': form,
+        'in_wishlist': in_wishlist,
     }
     return render(request, 'product_detail.html', context)
 

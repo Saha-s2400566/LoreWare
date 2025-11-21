@@ -119,6 +119,17 @@
                 </div>
                 <div class="col-md-9">
                     <nav style="display: flex; justify-content: flex-end; align-items: center; gap: 1rem;">
+                        <!-- Search Bar -->
+                        <form action="{% url 'products' %}" method="GET"
+                            style="display: flex; align-items: center; margin-right: 1rem;">
+                            <input type="text" name="q" placeholder="Search..."
+                                style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(0, 240, 255, 0.3); color: white; padding: 5px 15px; border-radius: 20px; outline: none; width: 200px; transition: all 0.3s;">
+                            <button type="submit"
+                                style="background: none; border: none; color: var(--color-neon-cyan); margin-left: -30px; cursor: pointer;">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </form>
+
                         <a href="{% url 'index' %}"
                             class="nav-link-futuristic {% if request.resolver_match.url_name == 'index' %}active{% endif %}">Home</a>
                         <a href="{% url 'about' %}"
@@ -171,7 +182,8 @@
         <div class="container">
             <div class="newsletter-section">
                 <h2 class="newsletter-title">Stay Updated</h2>
-                <p class="newsletter-subtitle">Subscribe to our newsletter for the latest tech news and exclusive offers
+                <p class="newsletter-subtitle">Subscribe to our newsletter for the latest tech news and
+                    exclusive offers
                 </p>
                 <form class="newsletter-form">
                     <input type="email" class="newsletter-input" placeholder="Enter your email address" required>
@@ -188,7 +200,8 @@
             <div class="row align-items-center">
                 <div class="col-md-4 text-center text-md-left mb-3 mb-md-0">
                     <span class="neon-text" style="font-size: 1.3rem; font-weight: 700;">TECHNEST</span>
-                    <p style="color: var(--color-mid-gray); margin: 0.5rem 0 0 0; font-size: 0.9rem;">Cutting-edge
+                    <p style="color: var(--color-mid-gray); margin: 0.5rem 0 0 0; font-size: 0.9rem;">
+                        Cutting-edge
                         technology solutions</p>
                 </div>
 
@@ -222,7 +235,8 @@
                             <i class="fa fa-instagram"></i>
                         </a>
                     </div>
-                    <p style="color: var(--color-mid-gray); margin: 0.75rem 0 0 0; font-size: 0.85rem;">© 2024 TECHNEST
+                    <p style="color: var(--color-mid-gray); margin: 0.75rem 0 0 0; font-size: 0.85rem;">
+                        © 2024 TECHNEST
                     </p>
                 </div>
             </div>

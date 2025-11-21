@@ -234,19 +234,6 @@ html {
     transition: width var(--transition-normal);
 }
 
-.nav-link-futuristic:hover,
-.nav-link-futuristic.active {
-    color: var(--color-neon-cyan);
-}
-
-.nav-link-futuristic:hover::after,
-.nav-link-futuristic.active::after {
-    width: 80%;
-}
-
-/* ========================================
-   CIRCUIT LINE DIVIDERS
-   ======================================== */
 
 .circuit-divider {
     height: 2px;

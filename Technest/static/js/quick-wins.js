@@ -317,10 +317,132 @@ document.addEventListener('DOMContentLoaded', function () {
         toast.show(alert.textContent.trim(), type);
         alert.remove();
     });
+
+    // Handle quantity buttons
+    document.querySelectorAll('.quantity-container, .product-card-futuristic').forEach(container => {
+        const minusBtn = container.querySelector('.minus-btn');
+        const plusBtn = container.querySelector('.plus-btn');
+        const quantityInput = container.querySelector('.quantity-input');
+
+        if (plusBtn && minusBtn && quantityInput) {
+            plusBtn.addEventListener('click', function () {
+                const max = parseInt(quantityInput.getAttribute('max')) || 999;
+                const current = parseInt(quantityInput.value);
+                if (current < max) {
+                    quantityInput.value = current + 1;
+                }
+            });
+
+            minusBtn.addEventListener('click', function () {
+                if (parseInt(quantityInput.value) > 1) {
+                    quantityInput.value = parseInt(quantityInput.value) - 1;
+                }
+            });
+        }
+    });
+
+    // Handle add to cart
+    document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            const productBox = this.closest('.product-card-futuristic');
+            if (!productBox) return;
+
+            const quantityInput = productBox.querySelector('.quantity-input');
+            const quantity = quantityInput ? quantityInput.value : 1;
+            const productId = productBox.dataset.productId;
+
+            // Send AJAX request to Django
+            fetch('/add_to_cart/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    product_id: productId,
+                    quantity: quantity
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        toast.success('Product added to cart!');
+                    } else {
+                        toast.error(data.message || 'Error adding product to cart');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    toast.error('Error adding product to cart');
+                });
+        });
+    });
+
+    // Handle wishlist button clicks with event delegation
+    document.addEventListener('click', function (e) {
+        const wishlistBtn = e.target.closest('.wishlist-btn');
+        if (wishlistBtn) {
+            const productId = wishlistBtn.dataset.productId;
+            if (productId) {
+                toggleWishlist(productId, wishlistBtn);
+            }
+        }
+    });
 });
+
+// Wishlist Functionality
+async function toggleWishlist(productId, btn) {
+    try {
+        const response = await fetch(`/wishlist/add/${productId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'Content-Type': 'application/json'
+            }
+        });
+
+        // Handle redirect to login (Django returns 200 with login page if redirect is followed)
+        if (response.redirected) {
+            window.location.href = response.url;
+            return;
+        }
+
+        // Check if response is JSON
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+            // If not JSON, it's likely an HTML error page or login page
+            window.location.href = '/accounts/login/?next=' + window.location.pathname;
+            return;
+        }
+
+        if (response.status === 401) {
+            toast.error('Please login to add items to wishlist');
+            return;
+        }
+
+        const data = await response.json();
+
+        if (data.status === 'success') {
+            const icon = btn.querySelector('i');
+            if (data.action === 'added') {
+                icon.classList.add('active');
+                toast.success(data.message);
+            } else {
+                icon.classList.remove('active');
+                toast.info(data.message);
+            }
+        } else {
+            toast.error(data.message);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        toast.error('An error occurred');
+    }
+}
 
 // Export for use in other scripts
 window.toast = toast;
 window.PasswordStrength = PasswordStrength;
 window.showSkeletons = showSkeletons;
 window.hideSkeletons = hideSkeletons;
+window.toggleWishlist = toggleWishlist;

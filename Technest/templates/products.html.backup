@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Products - Technest{% endblock %}
+
+{% block content %}
+
+<!-- Circuit Divider -->
+<div class="circuit-divider" style="margin-top: 80px;"></div>
+
+<!-- Products Section -->
+<section style="padding: 4rem 0; min-height: 80vh;">
+    <div class="container">
+        <div class="text-center mb-xl">
+            <h2 style="font-size: 3rem; font-weight: 700; margin-bottom: 1rem;">
+                Our <span class="neon-text">Products</span>
+            </h2>
+            <p style="color: var(--color-mid-gray); font-size: 1.1rem;">Discover our complete collection of cutting-edge
+                technology</p>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Filters -->
+            <div class="col-lg-3 mb-4">
+                <div class="glass-card" style="padding: 1.5rem; position: sticky; top: 100px;">
+                    <h4 style="color: var(--color-neon-cyan); margin-bottom: 1.5rem;">Filters</h4>
+
+                    <form method="GET" action="{% url 'products' %}">
+                        <!-- Search -->
+                        <div class="form-group mb-4">
+                            <label style="color: var(--color-light-gray);">Search</label>
+                            <input type="text" name="q" value="{{ search_query|default:'' }}"
+                                class="form-control-futuristic" placeholder="Search products...">
+                        </div>
+
+                        <!-- Categories -->
+                        <div class="form-group mb-4">
+                            <label
+                                style="color: var(--color-light-gray); margin-bottom: 0.5rem; display: block;">Category</label>
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <a href="{% url 'products' %}{% if search_query %}?q={{ search_query }}{% endif %}"
+                                    class="filter-link {% if not current_category %}active{% endif %}">
+                                    All Categories
+                                </a>
+                                {% for category in categories %}
+                                <a href="?category={{ category.slug }}{% if search_query %}&q={{ search_query }}{% endif %}"
+                                    class="filter-link {% if current_category == category.slug %}active{% endif %}">
+                                    {{ category.name }}
+                                </a>
+                                {% endfor %}
+                            </div>
+                            <!-- Hidden input to keep category selected when submitting form -->
+                            {% if current_category %}
+                            <input type="hidden" name="category" value="{{ current_category }}">
+                            {% endif %}
+                        </div>
+
+                        <!-- Price Range -->
+                        <div class="form-group mb-4">
+                            <label style="color: var(--color-light-gray);">Price Range</label>
+                            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                <input type="number" name="min_price" class="form-control-futuristic" placeholder="Min"
+                                    value="{{ request.GET.min_price }}" style="width: 100%;">
+                            </div>
+                        </div>
+
+                        <!-- Product Grid -->
+                        <div class="col-lg-9">
+                            <div class="grid-futuristic"
+                                style="grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));">
+                                {% for product in products %}
+                                <div class="product-card-futuristic slide-in" data-product-id="{{ product.id }}">
+                                    <div style="position: relative; overflow: hidden; padding: 1rem;">
+                                        <a href="{% url 'product_detail' product.id %}" style="text-decoration: none;">
+                                            {% if product.image %}
+                                            <img src="{{ product.image.url }}" alt="{{ product.name }}"
+                                                style="width: 100%; height: 250px; object-fit: cover; border-radius: var(--radius-md);" />
+                                            {% endif %}
+                                            <h3
+                                                style="color: white; font-size: 1.2rem; margin-top: 1rem; margin-bottom: 0.5rem;">
+                                                {{ product.name }}
+                                            </h3>
+                                        </a>
+                                        <!-- Wishlist Button -->
+                                        <button class="wishlist-btn" data-product-id="{{ product.id }}"
+                                            style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.5); border: none; border-radius: 50%; width: 35px; height: 35px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s;">
+                                            <i
+                                                class="fa fa-heart wishlist-icon {% if product.in_wishlist %}active{% endif %}"></i>
+                                        </button>
+
+                                        <p style="color: var(--color-mid-gray); margin-bottom: 1rem; min-height: 60px;">
+                                            {{ product.desc|truncatewords:10 }}
+                                        </p>
+
+                                        <!-- Stock Status -->
+                                        {% if product.stock > 0 %}
+                                        <p
+                                            style="color: var(--color-neon-cyan); font-size: 0.9rem; margin-bottom: 0.5rem;">
+                                            ✓ In Stock
+                                        </p>
+                                        {% else %}
+                                        <p style="color: #ff4444; font-size: 0.9rem; margin-bottom: 0.5rem;">
+                                            ✗ Out of Stock
+                                        </p>
+                                        {% endif %}
+
+                                        <div
+                                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                            <span class="product-price">${{ product.price }}</span>
+                                            <div style="display: flex; gap: 0.25rem;">
+                                                <span style="color: var(--color-neon-cyan); font-size: 1rem;">★ {{
+                                                    product.average_rating|floatformat:1 }}</span>
+                                                <span style="color: var(--color-mid-gray); font-size: 0.8rem;">({{
+                                                    product.review_count }})</span>
+                                            </div>
+                                        </div>
+
+                                        {% if product.stock > 0 %}
+                                        <div
+                                            style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 1rem;">
+                                            <button class="quantity-btn minus-btn"
+                                                style="background: var(--glass-bg); border: 1px solid var(--glass-border); color: white; width: 35px; height: 35px; border-radius: 4px; cursor: pointer; font-size: 1.2rem;">-</button>
+                                            <input type="number" class="quantity-input" value="1" min="1"
+                                                max="{{ product.stock }}"
+                                                style="width: 60px; text-align: center; background: var(--glass-bg); border: 1px solid var(--glass-border); color: white; padding: 6px; border-radius: 4px; font-size: 1rem;">
+                                            <button class="quantity-btn plus-btn"
+                                                style="background: var(--glass-bg); border: 1px solid var(--glass-border); color: white; width: 35px; height: 35px; border-radius: 4px; cursor: pointer; font-size: 1.2rem;">+</button>
+                                        </div>
+                                        <button class="btn-futuristic add-to-cart-btn" style="width: 100%;">Add to
+                                            Cart</button>
+                                        {% else %}
+                                        <button class="btn-futuristic"
+                                            style="width: 100%; opacity: 0.5; cursor: not-allowed;" disabled>Out of
+                                            Stock</button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% empty %}
+                                <div class="col-12 text-center" style="grid-column: 1 / -1; padding: 3rem;">
+                                    <div class="glass-card" style="padding: 3rem;">
+                                        <h3 style="color: var(--color-neon-cyan); margin-bottom: 1rem;">No Products
+                                            Found</h3>
+                                        <p style="color: var(--color-mid-gray);">Try adjusting your filters or search
+                                            query.</p>
+                                        <a href="{% url 'products' %}" class="btn-futuristic mt-3">View All Products</a>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                </div>
+            </div>
+</section>
+
+<!-- Circuit Divider -->
+<div class="circuit-divider"></div>
+
+{% endblock %}

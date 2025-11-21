@@ -1,52 +1,139 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}{{ product.name }}{% endblock %}
+{% block title %}{{ product.name }} - Technest{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-6">
-            <img src="{{ product.image.url }}" class="img-fluid" alt="{{ product.name }}"
-                style="max-height:400px;object-fit:cover;">
+<div class="circuit-divider" style="margin-top: 80px;"></div>
+
+<section style="padding: 4rem 0; min-height: 80vh;">
+    <div class="container">
+        <div class="glass-card product-card-futuristic" data-product-id="{{ product.id }}" style="padding: 2rem;">
+            <div class="row">
+                <div class="col-md-6 mb-4 mb-md-0">
+                    <div style="position: relative; border-radius: var(--radius-lg); overflow: hidden;">
+                        {% if product.image %}
+                        <img src="{{ product.image.url }}" class="img-fluid" alt="{{ product.name }}"
+                            style="width: 100%; object-fit: cover; border-radius: var(--radius-lg);">
+                        {% else %}
+                        <img src="{% static 'images/Samsung S8.png' %}" class="img-fluid" alt="placeholder"
+                            style="width: 100%; object-fit: cover; border-radius: var(--radius-lg);">
+                        {% endif %}
+
+                        <!-- Wishlist Button -->
+                        <button class="wishlist-btn" data-product-id="{{ product.id }}"
+                            style="position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.6); border: none; border-radius: 50%; width: 45px; height: 45px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s;">
+                            <i class="fa fa-heart wishlist-icon {% if in_wishlist %}active{% endif %}"
+                                style="font-size: 1.5rem;"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h1 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem;">{{ product.name }}</h1>
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                        <span class="product-price" style="font-size: 2rem;">${{ product.price }}</span>
+                        <div style="display: flex; gap: 0.25rem; align-items: center;">
+                            <span style="color: var(--color-neon-cyan); font-size: 1.2rem;">★ {{
+                                avg_rating|floatformat:1 }}</span>
+                            <span style="color: var(--color-mid-gray);">({{ reviews.count }} reviews)</span>
+                        </div>
+                    </div>
+
+                    <p
+                        style="color: var(--color-light-gray); font-size: 1.1rem; line-height: 1.6; margin-bottom: 2rem;">
+                        {{ product.desc }}
+                    </p>
+
+                    {% if product.stock > 0 %}
+                    <div style="margin-bottom: 2rem;">
+                        <label
+                            style="color: var(--color-mid-gray); margin-bottom: 0.5rem; display: block;">Quantity</label>
+                        <div style="display: flex; gap: 1rem; align-items: center;">
+                            <div class="quantity-container" style="display: flex; align-items: center; gap: 0.5rem;">
+                                <button class="quantity-btn minus-btn"
+                                    style="background: var(--glass-bg); border: 1px solid var(--glass-border); color: white; width: 40px; height: 40px; border-radius: 4px; cursor: pointer; font-size: 1.2rem;">-</button>
+                                <input type="number" class="quantity-input" value="1" min="1" max="{{ product.stock }}"
+                                    style="width: 70px; text-align: center; background: var(--glass-bg); border: 1px solid var(--glass-border); color: white; padding: 8px; border-radius: 4px; font-size: 1.1rem;">
+                                <button class="quantity-btn plus-btn"
+                                    style="background: var(--glass-bg); border: 1px solid var(--glass-border); color: white; width: 40px; height: 40px; border-radius: 4px; cursor: pointer; font-size: 1.2rem;">+</button>
+                            </div>
+                            <button class="btn-futuristic add-to-cart-btn"
+                                style="padding: 0.8rem 2rem; font-size: 1.1rem;">Add to Cart</button>
+                        </div>
+                        <p style="color: var(--color-neon-cyan); margin-top: 1rem;">✓ In Stock ({{ product.stock }}
+                            available)</p>
+                    </div>
+                    {% else %}
+                    <button class="btn-futuristic" style="opacity: 0.5; cursor: not-allowed; width: 100%;" disabled>Out
+                        of Stock</button>
+                    {% endif %}
+
+                    <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(0, 240, 255, 0.2);">
+                        <p style="color: var(--color-mid-gray);">Category: <span style="color: white;">{{
+                                product.category.name }}</span></p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-md-6">
-            <h2>{{ product.name }}</h2>
-            <p class="text-muted">{{ product.desc }}</p>
-            <p class="fw-bold">${{ product.get_price }}</p>
-            <button class="btn btn-primary" onclick="addToCart({{ product.id }})">Add to Cart</button>
-            <button class="btn btn-outline-danger" onclick="addToWishlist({{ product.id }})">Add to Wishlist</button>
+
+        <!-- Reviews Section -->
+        <div class="glass-card mt-5" style="padding: 2rem;">
+            <h3 style="color: var(--color-neon-cyan); margin-bottom: 2rem;">Customer Reviews</h3>
+
+            {% if user.is_authenticated %}
+            <div class="mb-5"
+                style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: var(--radius-md);">
+                <h4 style="margin-bottom: 1rem;">Write a Review</h4>
+                <form method="post" action="{% url 'submit_review' product.id %}">
+                    {% csrf_token %}
+                    <div class="form-group mb-3">
+                        <label style="color: var(--color-light-gray);">Rating</label>
+                        {{ review_form.rating }}
+                    </div>
+                    <div class="form-group mb-3">
+                        <label style="color: var(--color-light-gray);">Title</label>
+                        {{ review_form.title }}
+                    </div>
+                    <div class="form-group mb-3">
+                        <label style="color: var(--color-light-gray);">Review</label>
+                        {{ review_form.comment }}
+                    </div>
+                    <button type="submit" class="btn-futuristic">Submit Review</button>
+                </form>
+            </div>
+            {% else %}
+            <div class="alert alert-info"
+                style="background: rgba(0, 240, 255, 0.1); border: 1px solid var(--color-neon-cyan); color: white;">
+                Please <a href="{% url 'sign_in' %}"
+                    style="color: var(--color-neon-cyan); text-decoration: underline;">sign in</a> to write a review.
+            </div>
+            {% endif %}
+
+            <div class="reviews-list">
+                {% for review in reviews %}
+                <div
+                    style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <h5 style="font-weight: bold;">{{ review.title }}</h5>
+                        <span style="color: var(--color-neon-cyan);">
+                            {% for i in "12345"|make_list %}
+                            {% if forloop.counter <= review.rating %}★{% else %}☆{% endif %} {% endfor %} </span>
+                    </div>
+                    <p style="color: var(--color-light-gray); margin-bottom: 0.5rem;">{{ review.comment }}</p>
+                    <small style="color: var(--color-mid-gray);">By {{ review.user.username }} on {{
+                        review.created_at|date:"M d, Y" }}</small>
+                </div>
+                {% empty %}
+                <p style="color: var(--color-mid-gray); text-align: center;">No reviews yet. Be the first to review!</p>
+                {% endfor %}
+            </div>
         </div>
     </div>
+</section>
 
-    <hr class="my-4">
-    <h3>Reviews ({{ reviews|length }})</h3>
-    <p>Average rating: {{ avg_rating|floatformat:1 }} / 5</p>
-    <div class="list-group mb-4">
-        {% for review in reviews %}
-        <div class="list-group-item">
-            <strong>{{ review.title }}</strong> - {{ review.rating }}★
-            <p class="mb-1">{{ review.comment }}</p>
-            <small class="text-muted">by {{ review.user.username }} on {{ review.created_at|date:"M d, Y" }}</small>
-        </div>
-        {% empty %}
-        <p class="text-muted">No reviews yet. Be the first to review!</p>
-        {% endfor %}
-    </div>
-
-    {% if user.is_authenticated %}
-    <h4>Submit a Review</h4>
-    <form method="post" action="{% url 'submit_review' product.id %}">
-        {% csrf_token %}
-        {{ review_form.as_p }}
-        <button type="submit" class="btn btn-success">Submit Review</button>
-    </form>
-    {% else %}
-    <p><a href="{% url 'sign_in' %}">Sign in</a> to write a review.</p>
-    {% endif %}
-</div>
+<div class="circuit-divider"></div>
 {% endblock %}
 
-{% block extra_js %}
-<script src="{% static 'js/product-detail.js' %}"></script>
+{% block extra_scripts %}
+<!-- No extra scripts needed as quick-wins.js handles cart and wishlist -->
 {% endblock %}

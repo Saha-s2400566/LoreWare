@@ -1,15 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Product
-from django.contrib.auth import login
-from django.contrib.auth.views import LoginView
-from .forms import CustomUserCreationForm
-from django.http import JsonResponse
-from django.views.decorators.http import require_POST
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from decimal import Decimal
 from .utils import CartService
 import json
+from .models import Product, Wishlist, ProductReview
+from django.db.models import Avg
+from .forms import ProductReviewForm
 
 # Create your views here.
 def index(request):
@@ -136,3 +132,166 @@ def remove_from_cart(request, product_id):
     return redirect('cart')
 
 
+# ==================== WISHLIST VIEWS ====================
+@login_required
+def wishlist_view(request):
+    """Display user's wishlist"""
+    wishlist_items = Wishlist.objects.filter(user=request.user).select_related('product')
+    
+    # Check if products are in cart
+    cart_service = CartService(request)
+    cart_items = cart_service.get_cart_items()
+    cart_product_ids = {item.product_id for item in cart_items} if request.user.is_authenticated else set()
+    
+    # Add in_cart flag to each wishlist item
+    for item in wishlist_items:
+        item.in_cart = item.product.id in cart_product_ids
+    
+    context = {
+        'wishlist_items': wishlist_items,
+        'wishlist_count': wishlist_items.count(),
+    }
+    return render(request, 'wishlist.html', context)
+
+
+@login_required
+@require_POST
+def add_to_wishlist(request, product_id):
+    """Add product to wishlist via AJAX"""
+    try:
+        product = get_object_or_404(Product, id=product_id)
+        
+        # Check if already in wishlist
+        wishlist_item, created = Wishlist.objects.get_or_create(
+            user=request.user,
+            product=product
+        )
+        
+        if created:
+            return JsonResponse({
+                'status': 'success',
+                'message': f'{product.name} added to wishlist',
+                'action': 'added'
+            })
+        else:
+            return JsonResponse({
+                'status': 'info',
+                'message': f'{product.name} is already in your wishlist',
+                'action': 'exists'
+            })
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        }, status=400)
+
+
+@login_required
+@require_POST
+def remove_from_wishlist(request, wishlist_id):
+    """Remove item from wishlist via AJAX"""
+    try:
+        wishlist_item = get_object_or_404(Wishlist, id=wishlist_id, user=request.user)
+        product_name = wishlist_item.product.name
+        wishlist_item.delete()
+        
+        return JsonResponse({
+            'status': 'success',
+            'message': f'{product_name} removed from wishlist'
+        })
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        }, status=400)
+
+
+@login_required
+@require_POST
+def move_to_cart(request, wishlist_id):
+    """Move item from wishlist to cart"""
+    try:
+        wishlist_item = get_object_or_404(Wishlist, id=wishlist_id, user=request.user)
+        product = wishlist_item.product
+        
+        # Check if product is in stock
+        if not product.in_stock:
+            return JsonResponse({
+                'status': 'error',
+                'message': f'{product.name} is out of stock'
+            }, status=400)
+        
+        # Add to cart
+        cart_service = CartService(request)
+        cart_service.add(product.id, 1)
+        
+        # Remove from wishlist
+        wishlist_item.delete()
+        
+        return JsonResponse({
+            'status': 'success',
+            'message': f'{product.name} moved to cart'
+        })
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        }, status=400)
+
+
+@login_required
+def get_wishlist_status(request, product_id):
+    """Check if product is in user's wishlist"""
+    is_wishlisted = Wishlist.objects.filter(
+        user=request.user,
+        product_id=product_id
+    ).exists()
+    
+    return JsonResponse({
+        'is_wishlisted': is_wishlisted
+    })
+
+# ==================== PRODUCT DETAIL & REVIEWS ====================
+@login_required
+def product_detail(request, product_id):
+    """Display product details along with reviews and review form"""
+    product = get_object_or_404(Product, id=product_id)
+    # Fetch reviews
+    reviews = ProductReview.objects.filter(product=product, is_verified_purchase=True).order_by('-created_at')
+    # Average rating
+    avg_rating = reviews.aggregate(avg=models.Avg('rating'))['avg'] or 0
+    # Review form for logged-in users
+    if request.method == 'POST':
+        form = ProductReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.product = product
+            review.user = request.user
+            review.is_verified_purchase = True  # Simplified assumption
+            review.save()
+            messages.success(request, "Review submitted successfully!")
+            return redirect('product_detail', product_id=product.id)
+    else:
+        form = ProductReviewForm()
+    context = {
+        'product': product,
+        'reviews': reviews,
+        'avg_rating': avg_rating,
+        'review_form': form,
+    }
+    return render(request, 'product_detail.html', context)
+
+@require_POST
+@login_required
+def submit_review(request, product_id):
+    """Handle AJAX review submission (optional)"""
+    product = get_object_or_404(Product, id=product_id)
+    form = ProductReviewForm(request.POST)
+    if form.is_valid():
+        review = form.save(commit=False)
+        review.product = product
+        review.user = request.user
+        review.is_verified_purchase = True
+        review.save()
+        return JsonResponse({'status': 'success', 'message': 'Review submitted'})
+    return JsonResponse({'status': 'error', 'errors': form.errors}, status=400)

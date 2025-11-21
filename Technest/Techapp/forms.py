@@ -31,3 +31,12 @@ class CustomUserCreationForm(UserCreationForm):
 class CustomAuthenticationForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Enter your username'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Enter your password'}))
+class ProductReviewForm(forms.ModelForm):
+    class Meta:
+        model = ProductReview
+        fields = ['rating', 'title', 'comment']
+        widgets = {
+            'rating': forms.Select(choices=[(i, i) for i in range(1, 6)]),
+            'title': forms.TextInput(attrs={'placeholder': 'Review title'}),
+            'comment': forms.Textarea(attrs={'placeholder': 'Write your review...'}),
+        }

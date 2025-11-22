@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-^7qkwn*%*%4a#+ot!(50_1lj+=t@do+qz4k=bs3d-%b@^^k8vp')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # Hosts/domain names that are valid for this site; add your production domain.
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'yourdomain.com']

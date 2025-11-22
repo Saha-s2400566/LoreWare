@@ -1,2 +1,17 @@
-Django>=4.0,<5.0
-Pillow>=9.0.0
+# TechNest E-Commerce Platform - Requirements
+# Python 3.12+
+
+# Core Framework
+Django>=5.1.0,<6.0.0
+
+# Image Processing
+Pillow>=10.0.0
+
+# Production Server (Optional)
+# gunicorn>=21.0.0
+# whitenoise>=6.5.0
+
+# Development Tools (Optional)
+# django-debug-toolbar>=4.2.0
+# black>=23.0.0
+# flake8>=6.0.0

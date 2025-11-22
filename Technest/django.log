@@ -2273,3 +2273,15 @@ Method Not Allowed: /logout/
 Method Not Allowed (GET): /logout/
 Method Not Allowed: /logout/
 "GET /logout/ HTTP/1.1" 405 0
+Forbidden (CSRF token from the 'X-Csrftoken' HTTP header has incorrect length.): /add_to_cart/
+"POST /add_to_cart/ HTTP/1.1" 403 2549
+Forbidden (CSRF token from the 'X-Csrftoken' HTTP header has incorrect length.): /add_to_cart/
+"POST /add_to_cart/ HTTP/1.1" 403 2549
+Forbidden (CSRF token from the 'X-Csrftoken' HTTP header has incorrect length.): /add_to_cart/
+"POST /add_to_cart/ HTTP/1.1" 403 2549
+Forbidden (CSRF token from the 'X-Csrftoken' HTTP header has incorrect length.): /add_to_cart/
+"POST /add_to_cart/ HTTP/1.1" 403 2549
+Forbidden (CSRF token from the 'X-Csrftoken' HTTP header has incorrect length.): /add_to_cart/
+"POST /add_to_cart/ HTTP/1.1" 403 2549
+Forbidden (CSRF token from the 'X-Csrftoken' HTTP header has incorrect length.): /add_to_cart/
+"POST /add_to_cart/ HTTP/1.1" 403 2549

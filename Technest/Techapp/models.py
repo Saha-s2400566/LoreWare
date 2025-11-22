@@ -149,9 +149,10 @@ class Cart(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
     added_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return f"{self.user.username} - {self.product.name} (x{self.quantity})"
+        return f"{self.user.username}'s cart - {self.product.name}"
 
     class Meta:
         verbose_name = 'Cart Item'

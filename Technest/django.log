@@ -2258,3 +2258,18 @@ Not Found: /static/images/about.png
 "GET /media/products/AirPods_Pro_2nd_Gen.jpg HTTP/1.1" 404 179
 "GET /static/images/about.png HTTP/1.1" 404 179
 "GET /media/products/Sony_WH-1000XM5.jpg HTTP/1.1" 404 179
+Method Not Allowed (GET): /logout/
+Method Not Allowed: /logout/
+"GET /logout/ HTTP/1.1" 405 0
+Method Not Allowed (GET): /logout/
+Method Not Allowed: /logout/
+"GET /logout/ HTTP/1.1" 405 0
+Method Not Allowed (GET): /logout/
+Method Not Allowed: /logout/
+"GET /logout/ HTTP/1.1" 405 0
+Method Not Allowed (GET): /logout/
+Method Not Allowed: /logout/
+"GET /logout/ HTTP/1.1" 405 0
+Method Not Allowed (GET): /logout/
+Method Not Allowed: /logout/
+"GET /logout/ HTTP/1.1" 405 0

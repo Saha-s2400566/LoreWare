@@ -65,11 +65,12 @@ class CartModelTest(TestCase):
 class ProductModelTest(TestCase):
     def test_product_creation(self):
         """Test creating a product"""
+        category = Category.objects.create(name='Electronics', slug='electronics')
         product = Product.objects.create(
             name='Test Product',
             desc='Test Description',
             price=99.99,
-            category='Electronics',
+            category=category,
             stock=10
         )
         self.assertEqual(product.name, 'Test Product')
@@ -89,9 +90,9 @@ class ProductModelTest(TestCase):
 class ProductSortTest(TestCase):
     def setUp(self):
         self.category = Category.objects.create(name='Electronics', slug='electronics')
-        self.p1 = Product.objects.create(name='P1', price=10.00, category=self.category)
-        self.p2 = Product.objects.create(name='P2', price=20.00, category=self.category)
-        self.p3 = Product.objects.create(name='P3', price=5.00, category=self.category)
+        self.p1 = Product.objects.create(name='P1', desc='Product 1', price=10.00, category=self.category)
+        self.p2 = Product.objects.create(name='P2', desc='Product 2', price=20.00, category=self.category)
+        self.p3 = Product.objects.create(name='P3', desc='Product 3', price=5.00, category=self.category)
         
         # Ensure distinct timestamps
         from django.utils import timezone

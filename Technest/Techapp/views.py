@@ -87,7 +87,24 @@ def about(request):
     return render(request, 'about.html')
 
 def checkout(request):
-    return render(request, 'checkout.html')
+    cart_service = CartService(request)
+    cart_items = cart_service.get_cart_items()
+    
+    # Calculate totals
+    cart_total = sum(
+        item.total_price if hasattr(item, 'total_price') else item['total_price'] 
+        for item in cart_items
+    )
+    tax_amount = cart_total * Decimal('0.10')  # 10% tax
+    total_with_tax = cart_total + tax_amount
+    
+    context = {
+        'cart_items': cart_items,
+        'cart_total': cart_total,
+        'tax_amount': tax_amount,
+        'total_with_tax': total_with_tax,
+    }
+    return render(request, 'checkout.html', context)
 
 def contact(request):
     return render(request, 'contact.html')
@@ -359,3 +376,22 @@ def cart_count(request):
         count = sum(cart.values()) if cart else 0
     
     return JsonResponse({'count': count})
+
+@require_POST
+def place_order(request):
+    """Handle order placement"""
+    try:
+        cart_service = CartService(request)
+        cart_items = cart_service.get_cart_items()
+        
+        if not cart_items:
+            return JsonResponse({'success': False, 'message': 'Cart is empty'}, status=400)
+        
+        # Placeholder - implement full order processing later
+        return JsonResponse({
+            'success': True,
+            'message': 'Order placed successfully',
+            'order_id': '12345'
+        })
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)}, status=500)

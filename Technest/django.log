@@ -2285,3 +2285,120 @@ Forbidden (CSRF token from the 'X-Csrftoken' HTTP header has incorrect length.):
 "POST /add_to_cart/ HTTP/1.1" 403 2549
 Forbidden (CSRF token from the 'X-Csrftoken' HTTP header has incorrect length.): /add_to_cart/
 "POST /add_to_cart/ HTTP/1.1" 403 2549
+Internal Server Error: /api/cart/count/
+Traceback (most recent call last):
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Year 1 archives\Comeback\WP2404752\Technest\Techapp\views.py", line 354, in cart_count
+    count = Cart.objects.filter(user=request.user, is_active=True).aggregate(
+            ^^^^
+NameError: name 'Cart' is not defined
+"GET /api/cart/count/ HTTP/1.1" 500 68604
+Internal Server Error: /api/cart/count/
+Traceback (most recent call last):
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Year 1 archives\Comeback\WP2404752\Technest\Techapp\views.py", line 354, in cart_count
+    count = Cart.objects.filter(user=request.user, is_active=True).aggregate(
+            ^^^^
+NameError: name 'Cart' is not defined
+"GET /api/cart/count/ HTTP/1.1" 500 68609
+Internal Server Error: /api/cart/count/
+Traceback (most recent call last):
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Year 1 archives\Comeback\WP2404752\Technest\Techapp\views.py", line 354, in cart_count
+    count = Cart.objects.filter(user=request.user, is_active=True).aggregate(
+            ^^^^
+NameError: name 'Cart' is not defined
+"GET /api/cart/count/ HTTP/1.1" 500 68609
+Internal Server Error: /api/cart/count/
+Traceback (most recent call last):
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Year 1 archives\Comeback\WP2404752\Technest\Techapp\views.py", line 354, in cart_count
+    count = Cart.objects.filter(user=request.user, is_active=True).aggregate(
+            ^^^^
+NameError: name 'Cart' is not defined
+"GET /api/cart/count/ HTTP/1.1" 500 68609
+Internal Server Error: /api/cart/count/
+Traceback (most recent call last):
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Year 1 archives\Comeback\WP2404752\Technest\Techapp\views.py", line 354, in cart_count
+    count = Cart.objects.filter(user=request.user, is_active=True).aggregate(
+            ^^^^
+NameError: name 'Cart' is not defined
+"GET /api/cart/count/ HTTP/1.1" 500 68609
+Internal Server Error: /api/cart/count/
+Traceback (most recent call last):
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Year 1 archives\Comeback\WP2404752\Technest\Techapp\views.py", line 354, in cart_count
+    count = Cart.objects.filter(user=request.user, is_active=True).aggregate(
+            ^^^^
+NameError: name 'Cart' is not defined
+"GET /api/cart/count/ HTTP/1.1" 500 68609
+Internal Server Error: /api/cart/count/
+Traceback (most recent call last):
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Year 1 archives\Comeback\WP2404752\Technest\Techapp\views.py", line 354, in cart_count
+    count = Cart.objects.filter(user=request.user, is_active=True).aggregate(
+            ^^^^
+NameError: name 'Cart' is not defined
+"GET /api/cart/count/ HTTP/1.1" 500 68609
+Internal Server Error: /api/cart/count/
+Traceback (most recent call last):
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Year 1 archives\Comeback\WP2404752\Technest\Techapp\views.py", line 354, in cart_count
+    count = Cart.objects.filter(user=request.user, is_active=True).aggregate(
+            ^^^^
+NameError: name 'Cart' is not defined
+"GET /api/cart/count/ HTTP/1.1" 500 68609
+Internal Server Error: /api/cart/count/
+Traceback (most recent call last):
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Year 1 archives\Comeback\WP2404752\Technest\Techapp\views.py", line 354, in cart_count
+    count = Cart.objects.filter(user=request.user, is_active=True).aggregate(
+            ^^^^
+NameError: name 'Cart' is not defined
+"GET /api/cart/count/ HTTP/1.1" 500 68613

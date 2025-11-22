@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toast Notification Demo - TechNest</title>
+    <link rel="stylesheet" href="../static/css/futuristic-theme.css">
+    <link rel="stylesheet" href="../static/css/toast-notifications.css">
+    <style>
+        body {
+            padding: 4rem 2rem;
+            min-height: 100vh;
+        }
+
+        .demo-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .demo-btn {
+            padding: 1rem;
+            font-size: 1rem;
+        }
+
+        .code-block {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            font-family: 'Courier New', monospace;
+            color: #00f0ff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="demo-container">
+        <h1 style="text-align: center; margin-bottom: 1rem;">
+            <span class="neon-text">Toast Notification</span> System
+        </h1>
+        <p style="text-align: center; color: var(--color-mid-gray); margin-bottom: 3rem;">
+            Click the buttons below to see different toast notifications in action
+        </p>
+
+        <div class="demo-grid">
+            <button class="btn-futuristic demo-btn" onclick="toast.success('Product added to cart!')">
+                Success Toast
+            </button>
+            <button class="btn-futuristic demo-btn" onclick="toast.error('Failed to process request')">
+                Error Toast
+            </button>
+            <button class="btn-futuristic demo-btn" onclick="toast.warning('Only 3 items left in stock!')">
+                Warning Toast
+            </button>
+            <button class="btn-futuristic demo-btn" onclick="toast.info('Free shipping on orders over $50')">
+                Info Toast
+            </button>
+        </div>
+
+        <div class="code-block">
+            <h3 style="margin-top: 0;">Usage Examples:</h3>
+            <pre style="margin: 0; line-height: 1.8;">
+// Success notification
+toast.success('Product added to cart!');
+
+// Error notification
+toast.error('Failed to process request');
+
+// Warning notification
+toast.warning('Only 3 items left!');
+
+// Info notification
+toast.info('Free shipping available');
+
+// Custom duration (5 seconds)
+toast.success('Message', null, 5000);
+
+// Custom title
+toast.success('Item saved', 'Success');
+            </pre>
+        </div>
+
+        <div class="glass-card" style="margin-top: 3rem; padding: 2rem;">
+            <h3 style="color: var(--color-neon-cyan);">Features</h3>
+            <ul style="color: var(--color-light-gray); line-height: 2;">
+                <li>✓ Smooth slide-in animations</li>
+                <li>✓ Auto-dismiss after 3 seconds</li>
+                <li>✓ Manual close button</li>
+                <li>✓ Animated progress bar</li>
+                <li>✓ Stacks multiple toasts</li>
+                <li>✓ Mobile responsive</li>
+                <li>✓ Matches futuristic theme</li>
+            </ul>
+        </div>
+
+        <div style="text-align: center; margin-top: 3rem;">
+            <a href="../templates/index.html" class="btn-outline">Back to Home</a>
+        </div>
+    </div>
+
+    <script src="../static/js/toast-notifications.js"></script>
+</body>
+
+</html>

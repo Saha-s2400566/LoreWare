@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from .models import Product, Cart
+from django.urls import reverse
+from .models import Product, Cart, Category
 
 User = get_user_model()
 
@@ -84,3 +85,36 @@ class ProductModelTest(TestCase):
             price=50.00
         )
         self.assertEqual(str(product), 'Sample Product')
+
+class ProductSortTest(TestCase):
+    def setUp(self):
+        self.category = Category.objects.create(name='Electronics', slug='electronics')
+        self.p1 = Product.objects.create(name='P1', price=10.00, category=self.category)
+        self.p2 = Product.objects.create(name='P2', price=20.00, category=self.category)
+        self.p3 = Product.objects.create(name='P3', price=5.00, category=self.category)
+        
+        # Ensure distinct timestamps
+        from django.utils import timezone
+        from datetime import timedelta
+        now = timezone.now()
+        self.p1.created_at = now - timedelta(hours=3)
+        self.p1.save()
+        self.p2.created_at = now - timedelta(hours=2)
+        self.p2.save()
+        self.p3.created_at = now - timedelta(hours=1)
+        self.p3.save()
+
+    def test_sort_price_low(self):
+        response = self.client.get(reverse('products') + '?sort=price_low')
+        products = list(response.context['products'])
+        self.assertEqual(products, [self.p3, self.p1, self.p2])
+
+    def test_sort_price_high(self):
+        response = self.client.get(reverse('products') + '?sort=price_high')
+        products = list(response.context['products'])
+        self.assertEqual(products, [self.p2, self.p1, self.p3])
+
+    def test_sort_newest(self):
+        response = self.client.get(reverse('products') + '?sort=newest')
+        products = list(response.context['products'])
+        self.assertEqual(products, [self.p3, self.p2, self.p1])

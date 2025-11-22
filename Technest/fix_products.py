@@ -1,4 +1,7 @@
-{% extends 'base.html' %}
+
+import os
+
+content = r"""{% extends 'base.html' %}
 {% load static %}
 
 {% block title %}Products - Technest{% endblock %}
@@ -152,4 +155,7 @@
 <!-- Circuit Divider -->
 <div class="circuit-divider"></div>
 
-{% endblock %}
+{% endblock %}"""
+
+with open(r'd:\Year 1 archives\Comeback\WP2404752\Technest\templates\products.html', 'w', encoding='utf-8') as f:
+    f.write(content)

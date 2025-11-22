@@ -16,7 +16,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-^7qkwn*%*%4a#+ot!(5
 DEBUG = False
 
 # Hosts/domain names that are valid for this site; add your production domain.
-ALLOWED_HOSTS = ['127.0.0.1', 'yourdomain.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'yourdomain.com']
 
 # Application definition
 INSTALLED_APPS = [

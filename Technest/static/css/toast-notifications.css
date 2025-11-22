@@ -1,0 +1,207 @@
+/* ========================================
+   TOAST NOTIFICATION SYSTEM
+   ======================================== */
+
+.toast-container {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    pointer-events: none;
+}
+
+.toast {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    min-width: 300px;
+    max-width: 400px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    transform: translateX(450px);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    pointer-events: all;
+    position: relative;
+    overflow: hidden;
+}
+
+.toast::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--color-neon-cyan);
+}
+
+.toast.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.toast.toast-success::before {
+    background: linear-gradient(135deg, #00ff88, #00f0ff);
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+}
+
+.toast.toast-error::before {
+    background: linear-gradient(135deg, #ff0055, #ff4466);
+    box-shadow: 0 0 10px rgba(255, 0, 85, 0.5);
+}
+
+.toast.toast-warning::before {
+    background: linear-gradient(135deg, #ffaa00, #ffcc00);
+    box-shadow: 0 0 10px rgba(255, 170, 0, 0.5);
+}
+
+.toast.toast-info::before {
+    background: linear-gradient(135deg, #0066ff, #00f0ff);
+    box-shadow: 0 0 10px rgba(0, 102, 255, 0.5);
+}
+
+.toast-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.toast-success .toast-icon {
+    color: #00ff88;
+    background: rgba(0, 255, 136, 0.1);
+}
+
+.toast-error .toast-icon {
+    color: #ff4466;
+    background: rgba(255, 68, 102, 0.1);
+}
+
+.toast-warning .toast-icon {
+    color: #ffcc00;
+    background: rgba(255, 204, 0, 0.1);
+}
+
+.toast-info .toast-icon {
+    color: #00f0ff;
+    background: rgba(0, 240, 255, 0.1);
+}
+
+.toast-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.toast-title {
+    font-weight: 600;
+    font-size: 14px;
+    color: #ffffff !important;
+    margin: 0;
+}
+
+.toast-message {
+    font-size: 13px;
+    color: #d0d0d0 !important;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.toast-close {
+    background: none;
+    border: none;
+    color: #888888;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.toast-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
+.toast-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-neon-cyan), var(--color-electric-blue));
+    width: 100%;
+    transform-origin: left;
+    animation: toast-progress 3s linear forwards;
+}
+
+@keyframes toast-progress {
+    from {
+        transform: scaleX(1);
+    }
+
+    to {
+        transform: scaleX(0);
+    }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .toast-container {
+        right: 10px;
+        left: 10px;
+        top: 70px;
+    }
+
+    .toast {
+        min-width: auto;
+        max-width: none;
+    }
+}
+
+/* Loading spinner for buttons */
+.btn-loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.btn-loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spinner 0.6s linear infinite;
+}
+
+@keyframes spinner {
+    to {
+        transform: rotate(360deg);
+    }
+}
